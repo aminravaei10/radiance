@@ -6,7 +6,13 @@ import { FileModule } from './file/file.module';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), UserModule, DrizzleModule, FileModule, AuthModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    UserModule,
+    DrizzleModule,
+    FileModule,
+    AuthModule,
+  ],
   controllers: [],
   providers: [],
 })

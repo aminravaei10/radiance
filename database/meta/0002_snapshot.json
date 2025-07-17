@@ -1,6 +1,6 @@
 {
-  "id": "3247147b-38a3-4fb6-854d-a9ce490e13e2",
-  "prevId": "77d94d96-2bd4-428e-875b-ec5c7d82c422",
+  "id": "10252514-54f2-4d32-832f-faee3aa9f5ac",
+  "prevId": "593c2673-bc0e-4297-90cc-52169a0d5ef9",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -59,7 +59,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
+          "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
@@ -84,19 +84,37 @@
           "name": "firs_name",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "last_name": {
           "name": "last_name",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "ai_hash": {
           "name": "ai_hash",
           "type": "text",
           "primaryKey": false,
           "notNull": false
+        },
+        "username": {
+          "name": "username",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "password": {
+          "name": "password",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "roles": {
+          "name": "roles",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
         },
         "created_at": {
           "name": "created_at",
@@ -121,7 +139,15 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "user_username_unique": {
+          "name": "user_username_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "username"
+          ]
+        }
+      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
