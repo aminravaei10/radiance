@@ -52,19 +52,13 @@ export class AuthService {
 
     const payload = { sub: user.id, username: user.username };
     const accessToken = await this.jwtService.signAsync(payload, {
-      expiresIn: '15m',
-    });
-    const refreshToken = await this.jwtService.signAsync(payload, {
       expiresIn: '7d',
     });
+    const refreshToken = '';
 
     return {
       accessToken,
       refreshToken,
-      user: {
-        id: user.id,
-        username: user.username,
-      },
     };
   }
 
