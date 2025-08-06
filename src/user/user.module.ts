@@ -3,9 +3,23 @@ import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { DrizzleModule } from 'src/drizzle/drizzle.module';
 import { FileModule } from 'src/file/file.module';
+import { ConfigService } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-  imports: [DrizzleModule, FileModule],
+  imports: [
+    DrizzleModule,
+    FileModule,
+    JwtModule.registerAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        secret: config.get<string>('JWT_SECRET'),
+        signOptions: {
+          expiresIn: config.get<string>('JWT_EXPIRATION') || '15m',
+        },
+      }),
+    }),
+  ],
   providers: [UserService],
   controllers: [UserController],
   exports: [UserService],

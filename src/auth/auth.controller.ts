@@ -1,22 +1,19 @@
-import { Body, Controller, Post } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Post, HttpCode, HttpStatus } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AdminLoginDto, OperatorLoginDto } from './dtos/login.dto';
+import * as AuthDto from './dto/sign-in.dto';
 
-@ApiTags('Admin-Auth')
-@ApiBearerAuth()
-@Controller('/auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private authService: AuthService) {}
 
-  @Post('login/oprator')
-  opratorLogin(@Body() body: OperatorLoginDto) {
-    return this.authService.opratorLogin(body);
+  @HttpCode(HttpStatus.OK)
+  @Post('admin-login')
+  logIn(@Body() signInDto: AuthDto.AdminLogin) {
+    return this.authService.adminlogIn(signInDto.username, signInDto.pass);
   }
 
-  @Post('login/admin')
-  adminLogin(@Body() body: AdminLoginDto) {
-    return this.authService.adminLogin(body);
+  @Post('user-login')
+  userLogin(@Body() userLogin: AuthDto.UserLogIn) {
+    return this.authService.userLogin(userLogin.aiHash);
   }
 }

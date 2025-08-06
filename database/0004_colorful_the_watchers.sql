@@ -1,0 +1,1 @@
+ALTER TABLE "user" ADD CONSTRAINT "user_ai_hash_unique" UNIQUE("ai_hash");

@@ -7,17 +7,23 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
-  console.log(process.env.PORT);
   const config = new DocumentBuilder()
     .setTitle('Radiance API')
     .setDescription('API documentation for my project')
     .setVersion('1.0')
-    .addBearerAuth() // Optional: if you use JWT
+    .addBearerAuth({
+      type: 'http',
+      scheme: 'bearer',
+      bearerFormat: 'JWT',
+      name: 'Authorization',
+      in: 'header',
+    }) // Optional: if you use JWT
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, document);
   await migrator();
   await app.listen(process.env.PORT ?? 3000);
+  console.log(`server started on port: `, process.env.PORT);
 }
 bootstrap();
