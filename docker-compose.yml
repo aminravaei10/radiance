@@ -1,0 +1,23 @@
+services:
+  postgres:
+    container_name: radiance-postgres
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+    ports:
+      - '5433:5432'
+    volumes:
+      - ../data/volumes/radiance:/data/db
+  radiance:
+    build:
+      context: .
+    command: ['node', 'dist/main']
+    env_file:
+      - .env
+    restart: always
+    ports:
+      - '3001:3001'
+    depends_on:
+      - postgres
