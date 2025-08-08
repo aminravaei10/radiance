@@ -20,6 +20,7 @@ async function bootstrap() {
     }) // Optional: if you use JWT
     .build();
 
+  app.enableCors({ origin: '*' });
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, document);
   await migrator();
