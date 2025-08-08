@@ -16,7 +16,6 @@ export class UserService {
     @Inject(FileService) private fileService: FileService,
   ) {}
   async createUser(dto: CreateUserDto, file?: Express.Multer.File) {
-    // eslint-disable-next-line no-useless-catch
     try {
       const user = await this.db
         .insert(userModel)
@@ -30,11 +29,11 @@ export class UserService {
           userId: userModel.id,
         });
       if (file) {
-        await this.fileService.uploadFile(user[0].userId, 'user-files', file);
+        await this.fileService.uploadFile(user[0].userId, file);
       }
     } catch (error) {
       console.log('error: ', error);
-      throw new BadRequestException('user has regestered before');
+      throw new BadRequestException(error);
     }
 
     return { message: 'User created successfully' };
