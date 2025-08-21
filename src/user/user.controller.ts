@@ -3,7 +3,9 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
+  Put,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -16,6 +18,8 @@ import 'multer';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ParseAndValidateJsonPipe } from 'src/pipes/parse-and-validate-json.pipe';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { EditUserDto } from './dtos/edit-user.dto';
+import { UUID } from 'crypto';
 // import type { Response } from 'express';
 // import { FileFieldsInterceptor } from '@nestjs/platform-express';
 
@@ -47,5 +51,17 @@ export class UserController {
   @ApiOperation({ summary: 'Get all users' })
   getAllUsers() {
     return this.userService.getAllUsers();
+  }
+
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @Put('/:id')
+  @ApiBody({
+    description: 'edit one user by id',
+    type: EditUserDto,
+  })
+  @ApiOperation({ summary: 'edit a user by id' })
+  updateUserById(@Body() body: EditUserDto, @Param('id') id: UUID) {
+    return this.userService.updateUserById(id, body);
   }
 }

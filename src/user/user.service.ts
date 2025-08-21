@@ -3,10 +3,12 @@ import { DrizzleAsyncProvider } from 'src/drizzle/drizzle.provider';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { userModel, UserSelect } from './schema/user.schema';
 import { CreateUserDto } from './dtos/create-user.dto';
-import { role } from './enum/role.enum';
+import { Role } from './enum/role.enum';
 import { eq, and } from 'drizzle-orm';
 import { FileService } from 'src/file/file.service';
 import { fileModel } from 'src/file/schema/file.schema';
+import { EditUserDto } from './dtos/edit-user.dto';
+import { UUID } from 'crypto';
 
 @Injectable()
 export class UserService {
@@ -23,7 +25,8 @@ export class UserService {
           firstName: dto.fName,
           lastName: dto.lName,
           AIHash: dto.aiHash,
-          role: role.Operator,
+          role: Role.Operator,
+          mobile: dto.mobile,
         })
         .returning({
           userId: userModel.id,
@@ -71,6 +74,18 @@ export class UserService {
       .where(eq(userModel.AIHash, aiHash));
   }
 
+  async updateUserById(id: UUID, user: EditUserDto) {
+    return await this.db
+      .update(userModel)
+      .set({
+        firstName: user.fName,
+        lastName: user.lName,
+        mobile: user.mobile,
+        role: user.role,
+      })
+      .where(eq(userModel.id, id));
+  }
+
   async onApplicationBootstrap() {
     await this.db
       .insert(userModel)
@@ -80,7 +95,7 @@ export class UserService {
         lastName: 'Admin',
         AIHash: 'admin-hash',
         password: (process.env.ADMIN_PASSWORD as string) || 'admin',
-        role: role.Admin,
+        role: Role.Admin,
       })
       .onConflictDoNothing();
     console.log('UserService initialized');

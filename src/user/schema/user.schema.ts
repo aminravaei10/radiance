@@ -1,6 +1,6 @@
 import { pgTable, text, uuid } from 'drizzle-orm/pg-core';
 import { timestamps } from '../../db/schema.helper';
-import { role } from '../enum/role.enum';
+import { Role } from '../enum/role.enum';
 
 export const userModel = pgTable('user', {
   id: uuid('id').defaultRandom().notNull().primaryKey(),
@@ -9,7 +9,8 @@ export const userModel = pgTable('user', {
   AIHash: text('ai_hash').unique(),
   username: text('username').unique(),
   password: text('password'),
-  role: text('roles').$type<role>().notNull(),
+  mobile: text('mobile'),
+  role: text('roles').$type<Role>().notNull(),
   ...timestamps,
 });
 
