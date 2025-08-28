@@ -22,8 +22,8 @@ export class UserService {
       const user = await this.db
         .insert(userModel)
         .values({
-          firstName: dto.fName,
-          lastName: dto.lName,
+          firstName: dto.fName || '',
+          lastName: dto.lName || '',
           AIHash: dto.aiHash,
           role: Role.Operator,
           mobile: dto.mobile,

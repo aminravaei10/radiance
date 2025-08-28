@@ -6,12 +6,15 @@ export class CreateUserDto {
   @IsString()
   @IsOptional()
   username?: string;
-  @ApiProperty()
-  @IsString()
-  fName: string;
 
   @ApiProperty()
   @IsString()
+  @IsOptional()
+  fName?: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
   lName: string;
 
   @ApiProperty()
@@ -20,5 +23,6 @@ export class CreateUserDto {
 
   @ApiProperty()
   @IsString()
+  @IsOptional()
   mobile: string;
 }

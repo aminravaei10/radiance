@@ -9,7 +9,7 @@ export const userModel = pgTable('user', {
   AIHash: text('ai_hash').unique(),
   username: text('username').unique(),
   password: text('password'),
-  mobile: text('mobile'),
+  mobile: text('mobile').unique(),
   role: text('roles').$type<Role>().notNull(),
   ...timestamps,
 });

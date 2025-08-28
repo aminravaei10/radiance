@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import {
   Body,
   Controller,
@@ -28,12 +27,12 @@ import { UUID } from 'crypto';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @ApiOperation({ summary: 'Create a new vmap' })
+  @ApiOperation({ summary: 'Create a new user' })
   @Post()
   @ApiOperation({ summary: 'Create user with JSON and file' })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
-    description: 'User data and avatar',
+    description: 'User data and image file',
     type: CreateUserDto,
   })
   @UseInterceptors(FileInterceptor('file'))
