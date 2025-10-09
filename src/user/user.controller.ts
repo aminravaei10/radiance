@@ -12,37 +12,18 @@ import {
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { CreateUserDto } from './dtos/create-user.dto';
 import 'multer';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ParseAndValidateJsonPipe } from 'src/pipes/parse-and-validate-json.pipe';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { EditUserDto } from './dtos/edit-user.dto';
 import { UUID } from 'crypto';
-// import type { Response } from 'express';
-// import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { AddUserLogDto } from './dtos/unknown-log.dto';
 
 @ApiTags('User APIS')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-
-  @ApiOperation({ summary: 'Create a new user' })
-  @Post()
-  @ApiOperation({ summary: 'Create user with JSON and file' })
-  @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    description: 'User data and image file',
-    type: CreateUserDto,
-  })
-  @UseInterceptors(FileInterceptor('file'))
-  createUser(
-    @UploadedFile() file: Express.Multer.File,
-    @Body('userData', new ParseAndValidateJsonPipe(CreateUserDto))
-    dto: unknown,
-  ) {
-    return this.userService.createUser(dto as CreateUserDto, file);
-  }
 
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
@@ -62,5 +43,40 @@ export class UserController {
   @ApiOperation({ summary: 'edit a user by id' })
   updateUserById(@Body() body: EditUserDto, @Param('id') id: UUID) {
     return this.userService.updateUserById(id, body);
+  }
+
+  @Post('/log')
+  @ApiOperation({ summary: 'add a log' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description:
+      'add log of an unknown person with image file and a known log without image',
+    type: AddUserLogDto,
+  })
+  @UseInterceptors(FileInterceptor('file'))
+  addUnknownUser(
+    @UploadedFile() file: Express.Multer.File,
+    @Body('logData', new ParseAndValidateJsonPipe(AddUserLogDto))
+    dto: unknown,
+  ) {
+    return this.userService.addUserLog(dto as AddUserLogDto, file);
+  }
+
+  @ApiOperation({ summary: 'Get logs with pagination' })
+  @Get('/logs')
+  getLogs() {
+    return this.userService.getLogs();
+  }
+
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @Post('/upgrade/log/:id')
+  @ApiBody({
+    description: 'upgrade a unknown log to a known user',
+    type: EditUserDto,
+  })
+  @ApiOperation({ summary: 'upgrade a log to an user' })
+  upgradeLogToUser(@Body() body: EditUserDto, @Param('id') id: UUID) {
+    return this.userService.upgradeLogToUser(id, body);
   }
 }

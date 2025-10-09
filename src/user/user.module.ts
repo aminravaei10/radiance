@@ -5,6 +5,8 @@ import { DrizzleModule } from 'src/drizzle/drizzle.module';
 import { FileModule } from 'src/file/file.module';
 import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
+import { HttpModule } from '@nestjs/axios';
+import { AiModule } from 'src/ai/ai.module';
 
 @Module({
   imports: [
@@ -19,6 +21,8 @@ import { JwtModule } from '@nestjs/jwt';
         },
       }),
     }),
+    HttpModule,
+    AiModule,
   ],
   providers: [UserService],
   controllers: [UserController],

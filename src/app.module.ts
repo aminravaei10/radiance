@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { DrizzleModule } from './drizzle/drizzle.module';
 import { FileModule } from './file/file.module';
 import { AuthModule } from './auth/auth.module';
+import { AiModule } from './ai/ai.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { AuthModule } from './auth/auth.module';
     DrizzleModule,
     FileModule,
     AuthModule,
+    AiModule,
   ],
   controllers: [],
   providers: [],

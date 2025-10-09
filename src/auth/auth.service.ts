@@ -9,7 +9,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async adminlogIn(userName: string, pass: string): Promise<any> {
+  async adminLogIn(userName: string, pass: string): Promise<any> {
     const user = await this.userService.getUserByUserNameAndPassword(
       userName,
       pass,
@@ -24,7 +24,7 @@ export class AuthService {
   }
 
   async userLogin(aiHash: string) {
-    const user = await this.userService.getUserByAiHash(aiHash);
+    const user = await this.userService.getUserByPersonId(aiHash);
     if (!user.length) {
       throw new UnauthorizedException();
     }

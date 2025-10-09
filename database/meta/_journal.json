@@ -50,6 +50,20 @@
       "when": 1756383806964,
       "tag": "0006_red_fixer",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1759755695308,
+      "tag": "0007_smart_wild_pack",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1759761091907,
+      "tag": "0008_open_loki",
+      "breakpoints": true
     }
   ]
 }

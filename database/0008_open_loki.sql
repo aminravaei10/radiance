@@ -1,0 +1,1 @@
+ALTER TABLE "user_log" ADD CONSTRAINT "user_log_log_id_unique" UNIQUE("log_id");
