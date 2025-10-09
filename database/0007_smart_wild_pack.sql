@@ -21,7 +21,6 @@ CREATE TABLE "user_log" (
 --> statement-breakpoint
 ALTER TABLE "user" DROP CONSTRAINT "user_ai_hash_unique";--> statement-breakpoint
 ALTER TABLE "file" ALTER COLUMN "user_id" DROP NOT NULL;--> statement-breakpoint
-ALTER TABLE "file" ADD COLUMN "log_id" uuid NOT NULL;--> statement-breakpoint
 ALTER TABLE "user" ADD COLUMN "person_id" text;--> statement-breakpoint
 ALTER TABLE "user" ADD COLUMN "detected_time" text;--> statement-breakpoint
 ALTER TABLE "user_log" ADD CONSTRAINT "user_log_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
