@@ -64,6 +64,13 @@
       "when": 1759761091907,
       "tag": "0008_open_loki",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1760021940113,
+      "tag": "0009_fresh_anthem",
+      "breakpoints": true
     }
   ]
 }

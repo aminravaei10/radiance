@@ -1,0 +1,1 @@
+ALTER TABLE "file" ALTER COLUMN "log_id" DROP NOT NULL;

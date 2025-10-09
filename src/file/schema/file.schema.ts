@@ -7,8 +7,6 @@ export const fileModel = pgTable('file', {
   id: uuid('id').defaultRandom().notNull().primaryKey(),
   url: text('url'),
   userId: uuid('user_id').references(() => userModel.id),
-  logId: uuid('log_id')
-    .notNull()
-    .references(() => userLogModel.id),
+  logId: uuid('log_id').references(() => userLogModel.id),
   ...timestamps,
 });
