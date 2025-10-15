@@ -56,7 +56,7 @@ export class UserController {
   @UseInterceptors(FileInterceptor('file'))
   addUnknownUser(
     @UploadedFile() file: Express.Multer.File,
-    @Body('logData', new ParseAndValidateJsonPipe(AddUserLogDto))
+    @Body('body', new ParseAndValidateJsonPipe(AddUserLogDto))
     dto: unknown,
   ) {
     return this.userService.addUserLog(dto as AddUserLogDto, file);
