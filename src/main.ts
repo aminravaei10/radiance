@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import migrator from './db/migration';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { LoggingInterceptor } from './interceptor/logger.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -20,6 +21,7 @@ async function bootstrap() {
     }) // Optional: if you use JWT
     .build();
 
+  app.useGlobalInterceptors(new LoggingInterceptor());
   app.enableCors({ origin: '*' });
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, document);
