@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
@@ -17,9 +18,10 @@ export class ParseAndValidateJsonPipe implements PipeTransform {
     let parsed;
 
     try {
+      console.log(typeof value, value.body);
       if (typeof value !== 'string') {
-        console.log('object value: ', value);
-        parsed = value;
+        console.log('object value: ', value.body);
+        parsed = value.body;
       } else {
         console.log('string value', value);
         parsed = JSON.parse(value);
