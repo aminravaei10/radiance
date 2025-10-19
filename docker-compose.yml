@@ -8,9 +8,9 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_DB: radiance
     ports:
-      - '5433:5432'
+      - '5432:5432'
     volumes:
-      - ../data/volumes/radiance:/var/lib/postgresql/data
+      - ../data/volumes/radiance:/var/lib/postgresql/data2
   radiance:
     build:
       context: .
