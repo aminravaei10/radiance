@@ -33,16 +33,6 @@ export class LoggingInterceptor implements NestInterceptor {
           statusCode,
           responseTime: `${responseTime}ms`,
         };
-        if (responseTime > 1000) {
-          console.log(
-            'responseTime: ',
-            responseTime,
-            'url: ',
-            url,
-            'responseTime: ',
-            responseTime,
-          );
-        }
 
         if (
           Object.values(logMessage).some(
@@ -54,7 +44,7 @@ export class LoggingInterceptor implements NestInterceptor {
               value !== '{}',
           )
         ) {
-          // this.logger.log(JSON.stringify(logMessage, null, 2));
+          this.logger.log(JSON.stringify(logMessage, null, 2));
         }
       }),
       catchError((err) => {
