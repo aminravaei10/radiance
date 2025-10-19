@@ -16,12 +16,14 @@ export class ParseAndValidateJsonPipe implements PipeTransform {
   transform(value: any): any {
     let parsed;
 
-    console.log(value);
     try {
       if (typeof value !== 'string') {
+        console.log('object value: ', value);
         parsed = value;
       } else {
+        console.log('string value', value);
         parsed = JSON.parse(value);
+        console.log('parsed: ', parsed);
       }
     } catch (err) {
       Logger.error('Invalid JSON format', err);
@@ -31,16 +33,19 @@ export class ParseAndValidateJsonPipe implements PipeTransform {
     const object = plainToInstance(this.classType, parsed, {
       enableImplicitConversion: true,
     });
+    console.log('object: ', object);
 
     const errors = validateSync(object, {
       whitelist: true,
       forbidNonWhitelisted: true,
     });
+    console.log('errors: ', errors);
 
     if (errors.length > 0) {
       throw new BadRequestException(errors);
     }
 
+    console.log('final object: ', object);
     return object;
   }
 }

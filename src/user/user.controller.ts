@@ -58,6 +58,7 @@ export class UserController {
   @UseInterceptors(FileInterceptor('file'))
   addUnknownUser(@UploadedFile() file: Express.Multer.File, @Body() body: any) {
     const rawData = body.logData || body.log_Data || body;
+    console.log('rawData: ', rawData);
     const dto = new ParseAndValidateJsonPipe(AddUserLogDto).transform(rawData);
     return this.userService.addUserLog(dto as AddUserLogDto, file);
   }
