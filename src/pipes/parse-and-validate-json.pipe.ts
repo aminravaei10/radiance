@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   BadRequestException,
   Injectable,
@@ -11,21 +13,22 @@ import { validateSync } from 'class-validator';
 export class ParseAndValidateJsonPipe implements PipeTransform {
   constructor(private readonly classType: any) {}
 
-  transform(value: string) {
-    console.log('are you here? ');
+  transform(value: any): any {
     let parsed;
 
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      parsed = JSON.parse(value);
+      if (typeof value !== 'string') {
+        parsed = value;
+      } else {
+        parsed = JSON.parse(value);
+      }
     } catch (err) {
       Logger.error('Invalid JSON format', err);
       throw new BadRequestException('Invalid JSON format');
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     const object = plainToInstance(this.classType, parsed, {
-      enableImplicitConversion: true, // ✅ This solves the issue
+      enableImplicitConversion: true,
     });
 
     const errors = validateSync(object, {

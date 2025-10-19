@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   Body,
   Controller,
@@ -47,18 +49,16 @@ export class UserController {
 
   @Post('/log')
   @ApiOperation({ summary: 'add a log' })
-  @ApiConsumes('multipart/form-data')
+  @ApiConsumes('multipart/form-data', 'application/json')
   @ApiBody({
     description:
       'add log of an unknown person with image file and a known log without image',
     type: AddUserLogDto,
   })
   @UseInterceptors(FileInterceptor('file'))
-  addUnknownUser(
-    @UploadedFile() file: Express.Multer.File,
-    @Body('body', new ParseAndValidateJsonPipe(AddUserLogDto))
-    dto: unknown,
-  ) {
+  addUnknownUser(@UploadedFile() file: Express.Multer.File, @Body() body: any) {
+    const rawData = body.logData || body.log_Data || body;
+    const dto = new ParseAndValidateJsonPipe(AddUserLogDto).transform(rawData);
     return this.userService.addUserLog(dto as AddUserLogDto, file);
   }
 
