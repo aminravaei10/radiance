@@ -71,6 +71,13 @@
       "when": 1760021940113,
       "tag": "0009_fresh_anthem",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1760872495035,
+      "tag": "0010_gorgeous_bloodaxe",
+      "breakpoints": true
     }
   ]
 }

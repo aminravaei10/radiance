@@ -1,4 +1,6 @@
 export const enum Status {
-  Known = 'known',
-  Unknown = 'unknown',
+  Known = 'Known',
+  Unknown = 'Unknown',
+  ex = 'known', // ai support upper case literal value
+  ex2 = 'unknown',
 }
