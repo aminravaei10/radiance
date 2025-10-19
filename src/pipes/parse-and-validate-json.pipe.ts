@@ -22,7 +22,7 @@ export class ParseAndValidateJsonPipe implements PipeTransform {
       console.log('value body type', typeof value.body);
       if (typeof value !== 'string') {
         console.log('object value: ', value.body);
-        parsed = value.body;
+        parsed = JSON.parse(value.body);
       } else {
         console.log('string value', value);
         parsed = JSON.parse(value);
