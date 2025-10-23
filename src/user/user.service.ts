@@ -121,41 +121,49 @@ export class UserService {
 
   async upgradeLogToUser(id: UUID, dto: EditUserDto) {
     console.log('id: ', id);
-    await this.db.transaction(async (tx) => {
-      const log = await tx
-        .select()
-        .from(userLogModel)
-        .where(eq(userLogModel.id, id));
+    try {
+      await this.db.transaction(async (tx) => {
+        const log = await tx
+          .select()
+          .from(userLogModel)
+          .where(eq(userLogModel.id, id));
 
-      const user = await tx
-        .insert(userModel)
-        .values({
-          firstName: dto.fName,
-          lastName: dto.lName,
-          mobile: dto.mobile,
-          role: Role.Customer,
-        })
-        .returning({
-          userId: userModel.id,
-        });
+        const user = await tx
+          .insert(userModel)
+          .values({
+            firstName: dto.fName,
+            lastName: dto.lName,
+            mobile: dto.mobile,
+            role: Role.Customer,
+          })
+          .returning({
+            userId: userModel.id,
+          });
 
-      const createdUserByAI = await this.aiService.createUser(user[0].userId);
-      console.log('log has id:', log[0]);
-      console.log('createdUserByAI: ', createdUserByAI);
-      await this.aiService.assignLogToPerson(
-        parseInt(log[0].logId.toString()),
-        createdUserByAI.id,
-      );
-      await tx
-        .update(userModel)
-        .set({ personId: createdUserByAI.id.toString() })
-        .where(eq(userModel.id, user[0].userId));
+        const createdUserByAI = await this.aiService.createUser(user[0].userId);
+        console.log('log has id:', log[0]);
+        console.log('createdUserByAI: ', createdUserByAI);
+        await this.aiService.assignLogToPerson(
+          parseInt(log[0].logId.toString()),
+          createdUserByAI.id,
+        );
+        await tx
+          .update(userModel)
+          .set({ personId: createdUserByAI.id.toString() })
+          .where(eq(userModel.id, user[0].userId));
 
-      await tx
-        .update(userLogModel)
-        .set({ userId: user[0].userId, personType: Status.Known })
-        .where(eq(userLogModel.id, id));
-    });
+        await tx
+          .update(userLogModel)
+          .set({ userId: user[0].userId, personType: Status.Known })
+          .where(eq(userLogModel.id, id));
+      });
+    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      if (error?.cause?.code === '23505') {
+        throw new BadRequestException('user with this mobile already exists');
+      }
+      throw error;
+    }
   }
 
   async onApplicationBootstrap() {
