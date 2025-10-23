@@ -120,6 +120,7 @@ export class UserService {
   }
 
   async upgradeLogToUser(id: UUID, dto: EditUserDto) {
+    console.log('id: ', id);
     await this.db.transaction(async (tx) => {
       const log = await tx
         .select()

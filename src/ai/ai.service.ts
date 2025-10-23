@@ -61,6 +61,7 @@ export class AiService {
         this.httpService.post(url, {}, { headers }),
       );
 
+      console.log('assign log to person response.data: ', response.data);
       return response.data as assignLogToPerson;
     } catch (error) {
       console.log(
