@@ -139,7 +139,8 @@ export class UserService {
         });
 
       const createdUserByAI = await this.aiService.createUser(user[0].userId);
-
+      console.log('log has id:', log[0]);
+      console.log('createdUserByAI: ', createdUserByAI);
       await this.aiService.assignLogToPerson(
         parseInt(log[0].logId.toString()),
         createdUserByAI.id,
