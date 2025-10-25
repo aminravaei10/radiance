@@ -112,14 +112,14 @@ export class UserService {
     return await this.db
       .select()
       .from(userLogModel)
+      .leftJoin(userModel, eq(userModel.id, userLogModel.userId))
       .leftJoin(
         fileModel,
         or(
           eq(fileModel.logId, userLogModel.id),
-          eq(userLogModel.userId, fileModel.userId),
+          eq(userModel.id, fileModel.userId),
         ),
       )
-      .leftJoin(userModel, eq(userModel.id, userLogModel.userId))
       // .leftJoin(fileModel, eq(userModel.id, fileModel.userId))
       .limit(pageSize)
       .offset(pageSize * (pageNumber - 1))
