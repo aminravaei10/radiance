@@ -3,7 +3,7 @@ import { DrizzleAsyncProvider } from 'src/drizzle/drizzle.provider';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { userModel, UserSelect } from './schema/user.schema';
 import { Role } from './enum/role.enum';
-import { eq, and, desc } from 'drizzle-orm';
+import { eq, and, desc, or } from 'drizzle-orm';
 import { FileService } from 'src/file/file.service';
 import { fileModel } from 'src/file/schema/file.schema';
 import { EditUserDto } from './dtos/edit-user.dto';
@@ -112,8 +112,15 @@ export class UserService {
     return await this.db
       .select()
       .from(userLogModel)
-      .leftJoin(fileModel, eq(fileModel.logId, userLogModel.id))
+      .leftJoin(
+        fileModel,
+        or(
+          eq(fileModel.logId, userLogModel.id),
+          eq(userLogModel.userId, fileModel.userId),
+        ),
+      )
       .leftJoin(userModel, eq(userModel.id, userLogModel.userId))
+      // .leftJoin(fileModel, eq(userModel.id, fileModel.userId))
       .limit(pageSize)
       .offset(pageSize * (pageNumber - 1))
       .orderBy(desc(userLogModel.created_at));
