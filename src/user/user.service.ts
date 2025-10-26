@@ -109,7 +109,7 @@ export class UserService {
   }
 
   async getLogs(pageSize: number = 50, pageNumber: number = 1) {
-    return await this.db
+    const data: any[] = await this.db
       .select()
       .from(userLogModel)
       .leftJoin(userModel, eq(userModel.id, userLogModel.userId))
@@ -124,6 +124,19 @@ export class UserService {
       .limit(pageSize)
       .offset(pageSize * (pageNumber - 1))
       .orderBy(desc(userLogModel.created_at));
+
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    data.map(async (item) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      if (item.user.id && !item.file) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        item.file = await this.db
+          .select()
+          .from(fileModel)
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
+          .where(eq(fileModel.userId, item.user.id));
+      }
+    });
   }
 
   async upgradeLogToUser(id: UUID, dto: EditUserDto) {
