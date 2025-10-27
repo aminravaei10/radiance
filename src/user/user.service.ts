@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { DrizzleAsyncProvider } from 'src/drizzle/drizzle.provider';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
@@ -120,27 +124,22 @@ export class UserService {
           eq(userModel.id, fileModel.userId),
         ),
       )
-      // .leftJoin(fileModel, eq(userModel.id, fileModel.userId))
       .limit(pageSize)
       .offset(pageSize * (pageNumber - 1))
       .orderBy(desc(userLogModel.created_at));
-
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    data.map(async (item) => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    const result = [];
+    for (const item of data) {
       if (item.user && !item.file) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        item.file = await this.db
+        const file = await this.db
           .select()
           .from(fileModel)
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
           .where(eq(fileModel.userId, item.user.id));
+        result.push({ ...item, file: file[0] });
+      } else {
+        result.push(item);
       }
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return item;
-    });
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return data;
+    }
+    return result;
   }
 
   async upgradeLogToUser(id: UUID, dto: EditUserDto) {
