@@ -137,6 +137,8 @@ export class UserService {
           .where(eq(fileModel.userId, item.user.id));
       }
     });
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return data;
   }
 
   async upgradeLogToUser(id: UUID, dto: EditUserDto) {
