@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { DrizzleAsyncProvider } from 'src/drizzle/drizzle.provider';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
@@ -113,7 +109,7 @@ export class UserService {
   }
 
   async getLogs(pageSize: number = 50, pageNumber: number = 1) {
-    const data: any[] = await this.db
+    return await this.db
       .select()
       .from(userLogModel)
       .leftJoin(userModel, eq(userModel.id, userLogModel.userId))
@@ -127,19 +123,6 @@ export class UserService {
       .limit(pageSize)
       .offset(pageSize * (pageNumber - 1))
       .orderBy(desc(userLogModel.created_at));
-    const result = [];
-    for (const item of data) {
-      if (item.user && !item.file) {
-        const file = await this.db
-          .select()
-          .from(fileModel)
-          .where(eq(fileModel.userId, item.user.id));
-        result.push({ ...item, file: file[0] });
-      } else {
-        result.push(item);
-      }
-    }
-    return result;
   }
 
   async upgradeLogToUser(id: UUID, dto: EditUserDto) {
@@ -179,6 +162,11 @@ export class UserService {
           .update(userLogModel)
           .set({ userId: user[0].userId, personType: Status.Known })
           .where(eq(userLogModel.id, id));
+
+        await tx
+          .update(fileModel)
+          .set({ userId: user[0].userId })
+          .where(eq(fileModel.logId, log[0].id));
       });
     } catch (error) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
