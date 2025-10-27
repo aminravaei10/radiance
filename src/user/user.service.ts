@@ -128,7 +128,7 @@ export class UserService {
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     data.map(async (item) => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      if (item.user.id && !item.file) {
+      if (item.user && !item.file) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         item.file = await this.db
           .select()
