@@ -136,6 +136,8 @@ export class UserService {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
           .where(eq(fileModel.userId, item.user.id));
       }
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return item;
     });
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return data;
