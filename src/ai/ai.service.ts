@@ -69,6 +69,7 @@ export class AiService {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         error.response?.data,
       );
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       if (error.response?.status === 401) {
         console.log('Access token might be expired. Fetching new token...');
         await this.aiDashboardLogIn();
@@ -108,6 +109,7 @@ export class AiService {
     } catch (error) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       console.log('AI dashboard create user error: ', error.response.data);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       if (error.response?.status === 401) {
         console.log('Access token might be expired. Fetching new token...');
         await this.aiDashboardLogIn();

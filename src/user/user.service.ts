@@ -43,6 +43,7 @@ export class UserService {
         lastName: userModel.lastName,
         imageUrl: fileModel.url,
         mobile: userModel.mobile,
+        role: userModel.role,
       })
       .from(userModel)
       .leftJoin(fileModel, eq(fileModel.userId, userModel.id));
@@ -140,7 +141,7 @@ export class UserService {
             firstName: dto.fName,
             lastName: dto.lName,
             mobile: dto.mobile,
-            role: Role.Customer,
+            role: dto.role,
           })
           .returning({
             userId: userModel.id,
